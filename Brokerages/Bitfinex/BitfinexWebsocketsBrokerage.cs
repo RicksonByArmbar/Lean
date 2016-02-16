@@ -113,6 +113,7 @@ namespace QuantConnect.Brokerages.Bitfinex
         {
             _ws.Connect();
             this.Subscribe(null,null);
+            Authenticate();
         }
 
     }
