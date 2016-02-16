@@ -27,7 +27,7 @@ namespace QuantConnect.Data
     /// </summary>
     public class Slice : IEnumerable<KeyValuePair<Symbol, BaseData>>
     {
-        private readonly Ticks _ticks; 
+        private readonly Ticks _ticks;
         private readonly TradeBars _bars;
 
         // aux data
@@ -47,7 +47,8 @@ namespace QuantConnect.Data
         /// </summary>
         public DateTime Time
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -55,7 +56,8 @@ namespace QuantConnect.Data
         /// </summary>
         public bool HasData
         {
-            get; private set;
+            get;
+            private set;
         }
 
         /// <summary>
@@ -207,10 +209,18 @@ namespace QuantConnect.Data
             Lazy<object> dictionary;
             if (!_dataByType.TryGetValue(typeof(T), out dictionary))
             {
-                dictionary = new Lazy<object>(() => new DataDictionary<T>(_data.Value.Values.Select(x => x.GetData()).OfType<T>(), x => x.Symbol));
-                _dataByType[typeof (T)] = dictionary;
+                if (_data.Value.Values.Any(e => e.Type == SubscriptionType.Tick))
+                {
+                    dictionary = new Lazy<object>(() => new DataDictionary<T>(_data.Value.Values.SelectMany<dynamic, dynamic>(x => x.GetData()).OfType<T>(), x => x.Symbol));
+                }
+                else
+                {
+                    dictionary = new Lazy<object>(() => new DataDictionary<T>(_data.Value.Values.Select(x => x.GetData()).OfType<T>(), x => x.Symbol));
+                }
+
+                _dataByType[typeof(T)] = dictionary;
             }
-            return (DataDictionary<T>) dictionary.Value;
+            return (DataDictionary<T>)dictionary.Value;
         }
 
         /// <summary>
@@ -277,12 +287,12 @@ namespace QuantConnect.Data
 
                     case MarketDataType.TradeBar:
                         symbolData.Type = SubscriptionType.TradeBar;
-                        symbolData.TradeBar = (TradeBar) datum;
+                        symbolData.TradeBar = (TradeBar)datum;
                         break;
 
                     case MarketDataType.Tick:
                         symbolData.Type = SubscriptionType.Tick;
-                        symbolData.Ticks.Add((Tick) datum);
+                        symbolData.Ticks.Add((Tick)datum);
                         break;
 
                     case MarketDataType.Auxiliary:
@@ -322,7 +332,7 @@ namespace QuantConnect.Data
             where TItem : BaseData
         {
             if (collection != null) return collection;
-            collection = new T(); 
+            collection = new T();
 #pragma warning disable 618 // This assignment is left here until the Time property is removed.
             collection.Time = Time;
 #pragma warning restore 618
