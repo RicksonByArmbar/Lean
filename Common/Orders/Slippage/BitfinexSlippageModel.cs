@@ -30,6 +30,11 @@ namespace QuantConnect.Orders.Slippage
         /// </summary>
         public override decimal GetSlippageApproximation(Security asset, Order order)
         {
+            if (order.Price != 0)
+            {
+                return base.GetSlippageApproximation(asset, order);
+            }
+            
             var lastData = asset.GetLastData();
             var lastTick = lastData as Tick;
 

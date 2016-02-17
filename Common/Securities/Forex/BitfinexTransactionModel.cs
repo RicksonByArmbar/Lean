@@ -32,7 +32,7 @@ namespace QuantConnect.Securities.Forex
         /// Initializes a new instance of the <see cref="ForexTransactionModel"/> class
         /// </summary>
         /// <param name="monthlyTradeAmountInUSDollars">The monthly dollar volume traded</param>
-        public BitfinexTransactionModel(decimal monthlyTradeAmountInUSDollars = 0)
+        public BitfinexTransactionModel()
             : base(new ImmediateFillModel(), new BitfinexFeeModel(), new BitfinexSlippageModel())
         {
         }

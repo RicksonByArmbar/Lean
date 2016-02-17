@@ -25,7 +25,7 @@ using System.IO.Compression;
 namespace QuantConnect.ToolBox.BitcoinChartsDownloader
 {
     /// <summary>
-    /// Yahoo Data Downloader class 
+    /// BitcoinCharts Data Downloader class 
     /// </summary>
     public class BitcoinChartsDownloader : IDataDownloader
     {
@@ -48,7 +48,7 @@ namespace QuantConnect.ToolBox.BitcoinChartsDownloader
             using (var cl = new WebClient())
             {
 
-                //cl.DownloadFile(url, path);
+                cl.DownloadFile(url, path);
 
                 using (GZipStream instream = new GZipStream(File.OpenRead(path), CompressionMode.Decompress))// ArgumentException...
                 {

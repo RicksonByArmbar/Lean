@@ -8,7 +8,7 @@ namespace QuantConnect.ToolBox.CryptoiqDownloader
     class Program
     {
         /// <summary>
-        /// cryptoiq Downloader Toolbox Project For LEAN Algorithmic Trading Engine.
+        /// Cryptoiq Downloader Toolbox Project For LEAN Algorithmic Trading Engine.
         /// </summary>
         static void Main(string[] args)
         {
@@ -21,9 +21,9 @@ namespace QuantConnect.ToolBox.CryptoiqDownloader
                 Console.WriteLine("Usage: CryptoiqDownloader FROMDATE TODATE EXCHANGE SYMBOL");
                 Console.WriteLine("FROMDATE = yyyymmdd");
                 Console.WriteLine("TODATE = yyyymmdd");
+                Environment.Exit(1);
                 //todo: remove default params
-
-                args = new string[] { "20160201", DateTime.UtcNow.ToString("yyyyMMdd"), "bitfinex", "BTCUSD" };
+                //args = new string[] { "20160215", DateTime.UtcNow.ToString("yyyyMMdd"), "bitfinex", "BTCUSD" };
             }
 
             try
@@ -37,11 +37,11 @@ namespace QuantConnect.ToolBox.CryptoiqDownloader
 
                 // Create an instance of the downloader
                 const string market = Market.Bitcoin;
-                var downloader = new CryptoiqDownloader();
+                var downloader = new CryptoiqDownloader(args[2]);
 
                 // Download the data
                 var symbolObject = Symbol.Create(args[3], SecurityType.Forex, market);
-                var data = downloader.Get(symbolObject, Resolution.Tick, startDate, endDate, args[2]);
+                var data = downloader.Get(symbolObject, Resolution.Tick, startDate, endDate);
 
                 // Save the data
                 var writer = new LeanDataWriter(SecurityType.Forex, Resolution.Tick, symbolObject, dataDirectory, market);

@@ -21,30 +21,42 @@ using Newtonsoft.Json;
 using System.Linq;
 using System.IO;
 using System.IO.Compression;
+using QuantConnect.Configuration;
 
-namespace QuantConnect.ToolBox.QuandlBitcoinDownloader
+namespace QuantConnect.ToolBox.QuandlBitfinexDownloader
 {
     /// <summary>
-    /// Yahoo Data Downloader class 
+    /// Quandl Bitfinex Data Downloader class 
     /// </summary>
-    public class QuandlBitcoinDownloader : IDataDownloader
+    public class QuandlBitfinexDownloader : IDataDownloader
     {
 
+        string _apiKey;
+
+        public QuandlBitfinexDownloader(string apiKey)
+        {
+            _apiKey = apiKey;
+        }
 
         /// <summary>
-        /// Get historical data enumerable for a single symbol, type and resolution given this start and end time (in UTC).
+        /// Get historical data enumerable for Bitfinex from Quandl
         /// </summary>
         /// <param name="symbol">Symbol for the data we're looking for.</param>
-        /// <param name="resolution">Resolution of the data request</param>
+        /// <param name="resolution">Only Daily is supported</param>
         /// <param name="startUtc">Start time of the data in UTC</param>
         /// <param name="endUtc">End time of the data in UTC</param>
         /// <returns>Enumerable of base data for this symbol</returns>
         public IEnumerable<BaseData> Get(Symbol symbol, Resolution resolution, DateTime startUtc, DateTime endUtc)
         {
-            string apiKey = "vAhfNvBxVe3Ev66cjbTY";
+
+            if (resolution != Resolution.Daily)
+            {
+                throw new ArgumentException("Only daily data is currently supported.");
+            }
+
             string collapse = "daily";
 
-            var url = "https://www.quandl.com/api/v3/datasets/BCHARTS/BITFINEXUSD.csv?order=asc&collapse=" + collapse + "&api_key=" + apiKey + "&start_date="
+            var url = "https://www.quandl.com/api/v3/datasets/BCHARTS/BITFINEXUSD.csv?order=asc&collapse=" + collapse + "&api_key=" + _apiKey + "&start_date="
                 + startUtc.ToString("yyyy-MM-dd");
             using (var cl = new WebClient())
             {
@@ -64,44 +76,27 @@ namespace QuantConnect.ToolBox.QuandlBitcoinDownloader
                     string[] line = item.Split(',');
                     if (line.Count() == 8)
                     {
-                        var date = DateTime.Parse(line[0]);
-                        System.Diagnostics.Debug.WriteLine(line[0]);
-                        yield return new TradeBar
+                        var bar = new TradeBar
                         {
-                            Time = date,
+                            Time = DateTime.Parse(line[0]),
                             Open = decimal.Parse(line[1]),
                             High = decimal.Parse(line[2]),
                             Low = decimal.Parse(line[3]),
                             Close = decimal.Parse(line[4]),
                             Value = decimal.Parse(line[7]),
                             Volume = (long)Math.Round(decimal.Parse(line[5]), 0),
-                            Symbol = "BTCUSD",
-                            DataType = MarketDataType.TradeBar
+                            Symbol = symbol,
+                            DataType = MarketDataType.TradeBar,
+                            Period = new TimeSpan(24,0,0),
                         };
+                        System.Diagnostics.Debug.WriteLine(line[0]);
+                        yield return bar;
                     }
 
 
                 }
             }
 
-        }
-
-        private static DateTime FromUnixTime(long unixTime)
-        {
-            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            return epoch.AddSeconds(unixTime);
-        }
-
-        public class CryptoiqBitcoin
-        {
-
-            public DateTime time;
-            public decimal ask;
-            public decimal bid;
-            public decimal last;
-            public decimal high;
-            public decimal low;
-            public decimal volume;
         }
 
     }

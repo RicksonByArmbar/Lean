@@ -13,18 +13,12 @@ namespace QuantConnect.Brokerages.Bitfinex.Tests
 {
 
     //no DI/IOC means we get this
-    [TestFixture()]
+    [TestFixture(), Ignore("This test requires a configured and active account")]
     public class BitfinexWebsocketsBrokerageTests
     {
 
         BitfinexWebsocketsBrokerage unit = new BitfinexWebsocketsBrokerage();
 
-        [TestFixtureSetUp]
-        public void Initialize()
-        {
-
-
-        }
 
         [Test()]
         public void BitfinexWebsocketsBrokerageTest()

@@ -32,7 +32,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>QuantConnect.ToolBox.CryptoiqDownloader.Program</StartupObject>
+    <StartupObject>QuantConnect.ToolBox.QuandlBitfinexDownloader.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="IKVM.AWT.WinForms">
@@ -138,9 +138,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlgoSeekOptionsConverter\Program.cs" />
-    <Compile Include="CryptoiqDownloader\ICryptoiqDataDownloader.cs" />
-    <Compile Include="QuandlBitcoinDownloader\QuandlBitcoinDownloader.cs" />
-    <Compile Include="QuandlBitcoinDownloader\Program.cs" />
+    <Compile Include="QuandlBitfinexDownloader\QuandlBitfinexDownloader.cs" />
+    <Compile Include="QuandlBitfinexDownloader\Program.cs" />
     <Compile Include="CoarseUniverseGenerator\Program.cs" />
     <Compile Include="BitcoinChartsDownloader\BitcoinChartsDownloader.cs" />
     <Compile Include="BitcoinChartsDownloader\Program.cs" />

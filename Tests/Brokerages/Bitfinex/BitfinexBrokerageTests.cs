@@ -15,11 +15,11 @@ using System.Reflection;
 
 namespace QuantConnect.Tests.Brokerages.Bitfinex
 {
-    [TestFixture/*, Ignore("This test requires a configured and active account")*/]
+    [TestFixture, Ignore("This test requires a configured and active account")]
     public class BitfinexBrokerageTests : BrokerageTests
     {
 
-        BitfinexBrokerage unit = new BitfinexWebsocketsBrokerage();
+        BitfinexBrokerage unit;
 
         private enum BitfinexOrderType
         {
@@ -71,6 +71,13 @@ namespace QuantConnect.Tests.Brokerages.Bitfinex
             get { return 100m; }
         }
         #endregion
+
+        [SetUp]
+        public void Setup()
+        {
+            base.Setup();
+            unit = new BitfinexWebsocketsBrokerage();
+        }
 
         protected override IBrokerage CreateBrokerage(IOrderProvider orderProvider, ISecurityProvider securityProvider)
         {
