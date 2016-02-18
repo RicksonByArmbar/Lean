@@ -96,7 +96,6 @@
     </Compile>
     <Compile Include="AlgorithmRunner.cs" />
     <Compile Include="Algorithm\AlgorithmTradingTests.cs" />
-    <Compile Include="Brokerages\Bitfinex\BitfinexWebsocketsBrokerageTests.cs" />
     <Compile Include="Brokerages\Bitfinex\BitfinexBrokerageTests.cs" />
     <Compile Include="Brokerages\BrokerageTests.cs" />
     <Compile Include="Brokerages\Fxcm\FxcmBrokerageDataQueueHandlerTests.cs" />
